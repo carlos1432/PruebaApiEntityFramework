@@ -1,22 +1,35 @@
 ﻿using AccesoDatos;
 using Entidades;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace Negocio
 {
     public class ProductoNegocio : IProductoNegocio
     {
         private readonly DBContext _db;
+        private readonly AccesoDatosProductos _accesoDatos;
 
-        public ProductoNegocio(DBContext db)
+        public ProductoNegocio(DBContext db, IConfiguration configuration)
         {
             _db = db;
+            _accesoDatos = new AccesoDatosProductos(configuration);
         }
+
+        public async Task<string> CreateProducto(ProductoDTO producto)
+        {
+            try
+            {
+                await _accesoDatos.InsertarProducto(producto);
+                return "Producto insertado correctamente";
+            }
+            catch (Exception ex)
+            {
+                // Opcional: puedes loguear el error aquí si tienes un sistema de logs
+                return $"Error al insertar el producto: {ex.Message}";
+            }
+        }
+
 
         public async Task<Producto> GetProductoById(int id)
         {
@@ -28,6 +41,8 @@ namespace Negocio
             Console.WriteLine(_db.Database.GetConnectionString());
             return await _db.Productos.ToListAsync();
         }
+
+
     }
 
 }

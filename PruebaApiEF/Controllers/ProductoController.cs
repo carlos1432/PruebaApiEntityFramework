@@ -50,5 +50,20 @@ namespace PruebaApiEF.Controllers
             }
         }
 
+        // POST: api/Producto/CreateProducto
+        [HttpPost("[action]")]
+        public async Task<ActionResult<string>> CreateProducto([FromBody] ProductoDTO producto)
+        {
+            try
+            {
+                var mensaje = await _productoNegocio.CreateProducto(producto);
+                return Ok(new { message = mensaje });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
     }
 }

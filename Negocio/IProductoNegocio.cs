@@ -11,5 +11,6 @@ namespace Negocio
     {
         Task<List<Producto>> GetProductos();
         Task<Producto> GetProductoById(int id);
+        Task<string> CreateProducto(ProductoDTO producto);
     }
 }
